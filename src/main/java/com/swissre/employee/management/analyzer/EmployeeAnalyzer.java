@@ -9,12 +9,21 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * Employee Analyzer class which performs necessary operations on employee csv data.
+ */
 @Component
 public class EmployeeAnalyzer {
 
     public EmployeeAnalyzer() {
     }
 
+    /**
+     * Load CSV data onto a bean class
+     * @param csvFile
+     * @return Map having key - as employeeId/maanagerId - list of employees reporting to that manager.
+     * @throws IOException
+     */
     public Map<Integer, Employee> loadEmployeeData(File csvFile) throws IOException {
         Map<Integer, Employee> employeeMap = new HashMap<>();
         List<Employee> employeeList = CsvParser.mapCsvToBean(csvFile);
@@ -35,6 +44,10 @@ public class EmployeeAnalyzer {
         return employeeMap;
     }
 
+    /**
+     * Analyze manager salaries and generate list of overpaid and underpaid managers.
+     * @param employeeMap manager-emplpyeesList map
+     */
     private void analyzeManagerSalaries(Map<Integer, Employee> employeeMap) {
         List<Employee> underPaidManagerList = new ArrayList<>();
         List<Employee> overpaidManagerList = new ArrayList<>();
@@ -77,6 +90,10 @@ public class EmployeeAnalyzer {
         });
     }
 
+    /**
+     * Analyze and generate reporting line for each employees and generate a report.
+     * @param employeeMap manager-emplpyeesList map
+     */
     private void findEmployeesWithLongReportingLines(Map<Integer, Employee> employeeMap) {
         List<Employee> longReportingEmployees = new ArrayList<>();
 
@@ -99,6 +116,11 @@ public class EmployeeAnalyzer {
         System.out.println("There are " + longReportingEmployees.size() + "  employees who have reporting line more than 4");
     }
 
+    /**
+     * Helper method for generating employee to CEO reporting length
+     * @param employee
+     * @return
+     */
     private int getReportingLineLength(Employee employee) {
         int length = 0;
         Employee current = employee.getManager();
@@ -111,6 +133,11 @@ public class EmployeeAnalyzer {
         return length;
     }
 
+    /**
+     * public method which will consolidate the result.
+     * @param csvFile
+     * @throws IOException
+     */
     public void getEmployeeDetails(File csvFile) throws IOException {
         Map<Integer, Employee> employeeMap = loadEmployeeData(csvFile);
         if(!employeeMap.isEmpty()) {
